@@ -1,4 +1,5 @@
 <?php
+    $titulo = "Inicio";
     require_once "view/head/head.php";
 ?>
 
