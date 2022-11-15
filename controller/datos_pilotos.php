@@ -2,4 +2,39 @@
 
 header('Content-Type: application/json');
 
-require_once "config/conexion.php";
+require_once "../config/config.php";
+
+switch ($_GET['accion']) {
+    case 'listar':
+        $datos = mysqli_query($conexion, "SELECT IdPiloto, NombrePiloto, FechaNaciPiloto, LugarNaciPiloto, NacionalidadPiloto, InfoPiloto 
+                                          FROM pilotos");
+        $resultado = mysqli_fetch_all($datos, MYSQLI_ASSOC);
+        echo json_encode($resultado);
+        break;
+    case 'agregar':
+        $respuesta = mysqli_query($conexion, "INSERT INTO pilotos(NombrePiloto, FechaNaciPiloto, LugarNaciPiloto, NacionalidadPiloto, InfoPiloto) 
+                                              VALUES ('$_POST[NombrePiloto]', '$_POST[FechaNaciPiloto]', '$_POST[LugarNaciPiloto]', '$_POST[NacionalidadPiloto]', '$_POST[InfoPiloto]')");
+        echo json_encode($respuesta);                                      
+        break;
+    case 'borrar':
+        $respuesta = mysqli_query($conexion, "DELETE FROM pilotos
+                                              WHERE codigo = $_GET[IdPiloto]");
+        echo json_encode($respuesta);
+        break;
+    case 'consultar':
+        $datos = mysqli_query($conexion, "SELECT IdPiloto, NombrePiloto, FechaNaciPiloto, LugarNaciPiloto, NacionalidadPiloto, InfoPiloto
+                                          FROM pilotos
+                                          WHERE IdPiloto = $_GET[IdPiloto]");
+        $resultado = mysqli_fetch_all($datos, MYSQLI_ASSOC);
+        echo json_encode($resultado);
+        break;
+    case 'modificar':
+        $respuesta = mysqli_query($conexion, "UPDATE pilotos SET
+                                              NombrePiloto = '$_POST[NombrePiloto]',
+                                              FechaNaciPiloto = '$_POST[FechaNaciPiloto]',
+                                              LugarNaciPiloto = '$_POST[LugarNaciPiloto]',
+                                              NacionalidadPiloto = '$_POST[NacionalidadPiloto]',
+                                              InfoPiloto = '$_POST[NacionalidadPiloto]'");
+        echo json_encode($respuesta);
+        break;
+}
